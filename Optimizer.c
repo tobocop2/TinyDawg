@@ -20,58 +20,33 @@ void markCritical(Instruction *node, int field){
         if(node->prev == NULL){
             return;
         }
-        if(node->prev->opcode  == STORE){
-            if(node->prev->field1 == field){        //if the field1 macthces, then its critical
-                node->prev->critical = 1;
+        node = node->prev;
+        if(node->opcode  == STORE || node->opcode  == LOAD){
+            if(node->field1 == field){        //if the field1 macthces, then its critical
+                node->critical = 1;
                 printf("%d", field);
-                markCritical(node->prev, node->prev->field2);   //call markCritical on the previous node
+                markCritical(node, node->field2);   //call markCritical on the previous node
                 break;
             }
         }
-        else if(node->prev->opcode == MUL){
-            if(node->prev->field1 == field){
-                node->prev->critical =1;
+        else if(node->opcode == MUL || node->opcode == ADD || node->opcode == SUB){
+            if(node->field1 == field){
+                node->critical =1;
                 printf("%d", field);
-                markCritical(node->prev, node->prev->field2);
-                markCritical(node->prev, node->prev->field3);
+                markCritical(node, node->field2);
+                markCritical(node, node->field3);
                 break;
             }
         }
-        else if(node->prev->opcode == ADD){
-            if(node->prev->field1 == field){
-                node->prev->critical =1;
+        else if(node->opcode == LOADI){
+            if(node->field1 == field){
+                node->critical = 1;
                 printf("%d", field);
-                markCritical(node->prev, node->prev->field2);
-                markCritical(node->prev, node->prev->field3);
-                break;
-            }
-        }
-        else if(node->prev->opcode == SUB){
-            if(node->prev->field1 == field){
-                node->prev->critical =1;
-                printf("%d", field);
-                markCritical(node->prev, node->prev->field2);
-                markCritical(node->prev, node->prev->field3);
-                break;
-            }
-        }
-        else if(node->prev->opcode == LOADI){
-            if(node->prev->field1 == field){
-                node->prev->critical = 1;
-                printf("%d", field);
-                break;
-            }
-        }
-        else if(node->prev->opcode == LOAD){
-            if(node->prev->field1 == field){
-                node->prev->critical = 1;
-                printf("%d", field);
-                markCritical(node->prev, node->prev->field2);
                 break;
             }
         }
         node = node->prev;
-        count++;
+        //count++;
         //printf("\n%d\n", count);
     }
 }
