@@ -15,7 +15,6 @@
 #include "Instr.h"
 
 void markCritical(Instruction *node, int field){
-    int count = 0;
     while(node != NULL){
         if(node->prev == NULL){
             return;
@@ -64,7 +63,7 @@ int main()
     for(ptr = head; ptr!=NULL; ptr=ptr->next){
         if(ptr->opcode == WRITE || ptr->opcode == READ){
             ptr->critical = 1;
-            printf("%d\n",ptr->opcode);
+            //printf("%d\n",ptr->opcode);
         }
         if(ptr->opcode == WRITE){
             markCritical(ptr, ptr->field1);
@@ -78,6 +77,7 @@ int main()
             ptr = ptr->next;                //increment pointer
             free(tmp);
         }
+        ptr = ptr->next;
     }
     if (head) {
         PrintInstructionList(stdout, head);
