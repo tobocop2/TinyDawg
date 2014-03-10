@@ -23,25 +23,37 @@ void markCritical(Instruction *node, int field){
         if(node->opcode  == STORE || node->opcode  == LOAD){
             if(node->field1 == field){        //if the field1 macthces, then its critical
                 node->critical = 1;
-                printf("%d", field);
+                //printf("%d", field);
                 markCritical(node, node->field2);   //call markCritical on the previous node
-                break;
+                //break;
+            }
+            else{
+                markCritical(node, node->field1);
+                markCritical(node, node->field2);
             }
         }
         else if(node->opcode == MUL || node->opcode == ADD || node->opcode == SUB){
             if(node->field1 == field){
                 node->critical =1;
-                printf("%d", field);
+                //printf("%d", field);
                 markCritical(node, node->field2);
                 markCritical(node, node->field3);
-                break;
+                //break;
+            }
+            else{
+                markCritical(node, node->field1);
+                markCritical(node, node->field2);
+                markCritical(node, node->field3);
             }
         }
         else if(node->opcode == LOADI){
             if(node->field1 == field){
                 node->critical = 1;
-                printf("%d", field);
-                break;
+                //printf("%d", field);
+                //break;
+            }
+            else{
+                markCritical(node, node->field1);
             }
         }
         node = node->prev;
